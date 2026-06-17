@@ -90,17 +90,17 @@ if file:
 
         # ✅ corrigir NAN que virou string
         df[col_motivo] = df[col_motivo].replace("NAN", pd.NA)
-
+        
+        # ✅ tratar células vazias
+        df[col_motivo] = df[col_motivo].replace("", pd.NA)
+        
         # ✅ padronizar status
         df["Status"] = df["Status"].astype(str).str.strip().str.upper()
-
-        # ✅ garantir motivo limpo
-        df[col_motivo] = df[col_motivo].replace("NAN", pd.NA)
-        df[col_motivo] = df[col_motivo].replace("", pd.NA)
-
-        # ✅ ✅ preencher SOMENTE quando for REPROVADO
+        
+        # ✅ preencher SOMENTE para REPROVADO sem motivo
         df.loc[
-            (df["Status"] == "REPROVADO") & (df[col_motivo].isna()),
+            (df["Status"] == "REPROVADO") &
+            (df[col_motivo].isna()),
             col_motivo
         ] = "NÃO INCLUIU O MOTIVO DA REPROVAÇÃO"
 
